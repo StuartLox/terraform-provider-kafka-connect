@@ -1,7 +1,7 @@
 version: 2
 jobs:
   build:
-    working_directory: /go/src/github.com/Mongey/terraform-provider-kafka-connect
+    working_directory: /go/src/github.com/StuartLox/terraform-provider-kafka-connect
     docker:
       - image: circleci/golang:1.10
         environment:
@@ -37,7 +37,7 @@ jobs:
       - checkout
       - run: go build
       - store_artifacts:
-          path: /go/src/github.com/Mongey/terraform-provider-kafka/terraform-provider-kafka-connect
+          path: /go/src/github.com/StuartLox/terraform-provider-kafka/terraform-provider-kafka-connect
           destination: terraform-provider-kafka
       - run: go get github.com/jstemmer/go-junit-report
       - run: mkdir -p $TEST_RESULTS

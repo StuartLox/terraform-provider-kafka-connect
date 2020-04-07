@@ -5,8 +5,8 @@ import (
 	"log"
 	"time"
 
+	kc "github.com/StuartLox/go-kafka-connect/lib/connectors"
 	"github.com/hashicorp/terraform/helper/schema"
-	kc "github.com/ricardo-ch/go-kafka-connect/lib/connectors"
 )
 
 func kafkaConnectorResource() *schema.Resource {

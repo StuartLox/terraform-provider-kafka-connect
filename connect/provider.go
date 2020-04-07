@@ -5,7 +5,7 @@ import (
 
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/hashicorp/terraform/terraform"
-	kc "github.com/ricardo-ch/go-kafka-connect/lib/connectors"
+	kc "github.com/StuartLox/go-kafka-connect/lib/connectors"
 )
 
 func Provider() terraform.ResourceProvider {
