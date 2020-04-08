@@ -43,7 +43,7 @@ type highLevelClient struct {
 
 //NewClient generates a new client
 func NewClient(url string) HighLevelClient {
-	return &highLevelClient{client: newBaseClient(url), maxParallelRequest: 3}
+	return &highLevelClient{client: newBaseClient(url), maxParallelRequest: 1}
 }
 
 //Set the limit of parallel call to kafka-connect server

@@ -72,7 +72,7 @@ func newBaseClient(url string) BaseClient {
 		SetRetryCount(5).
 		SetRetryWaitTime(500 * time.Millisecond).
 		SetRetryMaxWaitTime(5 * time.Second).
-		SetTimeout(10 * time.Second).
+		SetTimeout(30 * time.Second).
 		AddRetryCondition(func(resp *resty.Response) (bool, error) {
 			return resp.StatusCode() == 409, nil
 		})

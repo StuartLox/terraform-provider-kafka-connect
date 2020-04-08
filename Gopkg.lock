@@ -2,6 +2,14 @@
 
 
 [[projects]]
+  digest = "1:bb44518bc2f2453ee95d62a934cd9e21b0b6dbe176f7ebe86c077bc0ce1f37a9"
+  name = "github.com/Mongey/terraform-provider-kafka-connect"
+  packages = ["connect"]
+  pruneopts = "NUT"
+  revision = "43e5608f34bf7c41c605064351d6c6b6a06769e0"
+  version = "v0.2.1"
+
+[[projects]]
   digest = "1:8bd40ec66a32437126e8ff3080f26b11ca5926917daa01eba1285d0b059416bc"
   name = "github.com/agext/levenshtein"
   packages = ["."]
@@ -592,6 +600,7 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/Mongey/terraform-provider-kafka-connect/connect",
     "github.com/hashicorp/terraform/helper/resource",
     "github.com/hashicorp/terraform/helper/schema",
     "github.com/hashicorp/terraform/plugin",
