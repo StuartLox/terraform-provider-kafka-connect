@@ -15,6 +15,7 @@ func kafkaConnectorResource() *schema.Resource {
 		Read:   connectorRead,
 		Update: connectorUpdate,
 		Delete: connectorDelete,
+		Exists: connectorExists,
 		Importer: &schema.ResourceImporter{
 			State: setNameFromID,
 		},
@@ -203,4 +204,23 @@ func removeSecondKeysFromFirst(first map[string]string, second map[string]string
 		delete(first, k)
 	}
 	return first
+}
+
+func connectorExists(d *schema.ResourceData, context interface{}) (bool, error) {
+	
+	client := context.(*kc.Client)
+	config, _ := configFromRD(d)
+	req := kc.CreateConnectorRequest{
+		ConnectorRequest: kc.ConnectorRequest{
+			Name: d.Id(),
+		},
+		Config: config,
+	}
+	
+	_, err := client.IsUpToDate(req.Name, req.Config)
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
 }
