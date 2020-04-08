@@ -2,10 +2,11 @@ package connect
 
 import (
 	"log"
+	"crypto/tls"
 
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/hashicorp/terraform/terraform"
-	kc "github.com/razbomi/go-kafka-connect/lib/connectors"
+	kc "github.com/StuartLox/go-kafka-connect/lib/connectors"
 )
 
 func Provider() terraform.ResourceProvider {
@@ -42,8 +43,12 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	keyFile := d.Get("client_key").(string)
 
 	c := kc.NewClient(addr)
-	if len(keyFile)+len(certFile) > 0 {
-		c.SetClientCertificates(certFile, keyFile)
+	if len(certFile) > 0 && len(keyFile) > 0 {
+		cert, err := tls.LoadX509KeyPair(certFile, keyFile)
+		if err != nil {
+			return nil, err
+		}
+		c.SetClientCertificates(cert)
 	}
 
 	return c, nil

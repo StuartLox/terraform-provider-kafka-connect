@@ -2,12 +2,12 @@
 
 
 [[projects]]
-  digest = "1:bb44518bc2f2453ee95d62a934cd9e21b0b6dbe176f7ebe86c077bc0ce1f37a9"
-  name = "github.com/Mongey/terraform-provider-kafka-connect"
-  packages = ["connect"]
+  branch = "enhancement/increase-timeout"
+  digest = "1:6465fc1f3b83e9e9e8781c1da457b38dcc08d8a30ae5b2e92f7860142e6ff9c0"
+  name = "github.com/StuartLox/go-kafka-connect"
+  packages = ["lib/connectors"]
   pruneopts = "NUT"
-  revision = "43e5608f34bf7c41c605064351d6c6b6a06769e0"
-  version = "v0.2.1"
+  revision = "3d65cd262d90f8803a504f99831f2b28c94e95b8"
 
 [[projects]]
   digest = "1:8bd40ec66a32437126e8ff3080f26b11ca5926917daa01eba1285d0b059416bc"
@@ -408,22 +408,6 @@
   version = "v1.1"
 
 [[projects]]
-  branch = "master"
-  digest = "1:3b4ddd2a4e932e36bc3ea00a7dcbdf31d1d8058b019ab0794c20a230429dcc01"
-  name = "github.com/razbomi/go-kafka-connect"
-  packages = ["lib/connectors"]
-  pruneopts = "NUT"
-  revision = "eebdc7701928e9d89e067b2a74a4db8d1f1f99a2"
-
-[[projects]]
-  branch = "master"
-  digest = "1:958dbe53cc3625c4cdab14bc7f8a92135a66ab72d47d6ba75fd9999b73c946bd"
-  name = "github.com/ricardo-ch/go-kafka-connect"
-  packages = ["lib/connectors"]
-  pruneopts = "NUT"
-  revision = "132b7b7ad380a6c860fecc0ca9b0a2af9bf45471"
-
-[[projects]]
   digest = "1:6bc0652ea6e39e22ccd522458b8bdd8665bf23bdc5a20eec90056e4dc7e273ca"
   name = "github.com/satori/go.uuid"
   packages = ["."]
@@ -600,13 +584,11 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
-    "github.com/Mongey/terraform-provider-kafka-connect/connect",
+    "github.com/StuartLox/go-kafka-connect/lib/connectors",
     "github.com/hashicorp/terraform/helper/resource",
     "github.com/hashicorp/terraform/helper/schema",
     "github.com/hashicorp/terraform/plugin",
     "github.com/hashicorp/terraform/terraform",
-    "github.com/razbomi/go-kafka-connect/lib/connectors",
-    "github.com/ricardo-ch/go-kafka-connect/lib/connectors",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1
