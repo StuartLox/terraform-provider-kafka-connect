@@ -3,11 +3,11 @@ package connectors
 import (
 	"crypto/tls"
 	"fmt"
-	"github.com/pkg/errors"
-	"gopkg.in/resty.v1"
-	"log"
 	"strconv"
 	"time"
+
+	"github.com/pkg/errors"
+	"gopkg.in/resty.v1"
 )
 
 // BaseClient implement the kafka-connect contract as a client
@@ -29,7 +29,8 @@ type BaseClient interface {
 
 	SetInsecureSSL()
 	SetDebug()
-	SetClientCertificates(certFile string, keyFile string)
+	SetClientCertificates(certs ...tls.Certificate)
+	SetBasicAuth(username string, password string)
 }
 
 type baseClient struct {
@@ -44,14 +45,12 @@ func (c *baseClient) SetDebug() {
 	c.restClient.SetDebug(true)
 }
 
-func (c *baseClient) SetClientCertificates(certFile string, keyFile string) {
-	cert, err := tls.LoadX509KeyPair(certFile, keyFile)
+func (c *baseClient) SetClientCertificates(certs ...tls.Certificate) {
+	c.restClient.SetCertificates(certs...)
+}
 
-	if err != nil {
-		log.Fatalf("ERROR client certificate: %s", err)
-	}
-
-	c.restClient.SetCertificates(cert)
+func (c *baseClient) SetBasicAuth(username string, password string) {
+	c.restClient.SetBasicAuth(username, password)
 }
 
 //ErrorResponse is generic error returned by kafka connect
@@ -74,7 +73,7 @@ func newBaseClient(url string) BaseClient {
 		SetRetryMaxWaitTime(5 * time.Second).
 		SetTimeout(30 * time.Second).
 		AddRetryCondition(func(resp *resty.Response) (bool, error) {
-			return resp.StatusCode() == 409, nil
+			return (resp.StatusCode() == 409 || resp.StatusCode() == 500), nil
 		})
 
 	return &baseClient{restClient: restClient}

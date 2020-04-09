@@ -1,12 +1,14 @@
 package connect
 
 import (
+	"crypto/tls"
 	"log"
 
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/hashicorp/terraform/terraform"
 	kc "github.com/razbomi/go-kafka-connect/lib/connectors"
 )
+
 
 func Provider() terraform.ResourceProvider {
 	log.Printf("[INFO] Creating Provider")
@@ -20,12 +22,17 @@ func Provider() terraform.ResourceProvider {
 			"client_cert": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				DefaultFunc: schema.EnvDefaultFunc("CLIENT_CERT", ""),
+				DefaultFunc: schema.EnvDefaultFunc("KAFKA_CLIENT_CERT", ""),
 			},
 			"client_key": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				DefaultFunc: schema.EnvDefaultFunc("CLIENT_KEY", ""),
+				DefaultFunc: schema.EnvDefaultFunc("KAFKA_CLIENT_KEY", ""),
+			},
+			"max_paralellism": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc("MAX_PARALELLISM", "3"),
 			},
 		},
 		ConfigureFunc: providerConfigure,
@@ -38,12 +45,17 @@ func Provider() terraform.ResourceProvider {
 func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	log.Printf("[INFO] Initializing KafkaConnect client")
 	addr := d.Get("url").(string)
+	log.Printf("[INFO] KafkaConnect URL: %s", addr)
+	c := kc.NewClient(addr)
+	
 	certFile := d.Get("client_cert").(string)
 	keyFile := d.Get("client_key").(string)
-
-	c := kc.NewClient(addr)
-	if len(keyFile)+len(certFile) > 0 {
-		c.SetClientCertificates(certFile, keyFile)
+	if len(certFile) > 0 && len(keyFile) > 0 {
+		cert, err := tls.LoadX509KeyPair(certFile, keyFile)
+		if err != nil {
+			log.Fatal("Invalid Certificate")
+		}
+		c.SetClientCertificates(cert)
 	}
 
 	return c, nil

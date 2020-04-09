@@ -1,6 +1,7 @@
 package connectors
 
 import (
+	"crypto/tls"
 	"fmt"
 	"sync"
 	"time"
@@ -32,8 +33,9 @@ type HighLevelClient interface {
 	DeployMultipleConnector(connectors []CreateConnectorRequest) (err error)
 	SetInsecureSSL()
 	SetDebug()
-	SetClientCertificates(certFile string, keyFile string)
+	SetClientCertificates(certs ...tls.Certificate)
 	SetParallelism(value int)
+	SetBasicAuth(username string, password string)
 }
 
 type highLevelClient struct {
@@ -43,7 +45,7 @@ type highLevelClient struct {
 
 //NewClient generates a new client
 func NewClient(url string) HighLevelClient {
-	return &highLevelClient{client: newBaseClient(url), maxParallelRequest: 1}
+	return &highLevelClient{client: newBaseClient(url), maxParallelRequest: 3}
 }
 
 //Set the limit of parallel call to kafka-connect server
@@ -60,8 +62,12 @@ func (c *highLevelClient) SetDebug() {
 	c.client.SetDebug()
 }
 
-func (c *highLevelClient) SetClientCertificates(certFile string, keyFile string) {
-	c.client.SetClientCertificates(certFile, keyFile)
+func (c *highLevelClient) SetClientCertificates(certs ...tls.Certificate) {
+	c.client.SetClientCertificates(certs...)
+}
+
+func (c *highLevelClient) SetBasicAuth(username string, password string) {
+	c.client.SetBasicAuth(username, password)
 }
 
 //GetAll gets the list of all active connectors
